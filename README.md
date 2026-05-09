@@ -19,7 +19,7 @@ The system targets the **Polymarket BTC Up/Down (5-Minute Cycle)**, a highly vol
 
 ## 📊 Product Showcase
 
-![VQuant Polymarket Bot Dashboard](Phase1/dashboard_screenshot.jpg)
+![VQuant Polymarket Bot Dashboard](Assets/dashboard_screenshot.jpg)
 *Real-time TradingView Dashboard (VQuant Signal Engine) dynamically tracking Volume Vectors, MTF Trend alignments, and Timing Logic before dispatching execution signatures to the Polymarket Protocol.*
 
 ---
