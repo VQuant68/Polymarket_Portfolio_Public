@@ -1,0 +1,41 @@
+📋 TECHNICAL SPECIFICATIONS (PUBLIC VERSION)
+System: Automated Trading Bot — Polymarket BTC Up/Down
+
+---
+
+1. 🧭 PROJECT OVERVIEW
+This project is a fully automated trading system bridging TradingView analytics with the Polymarket decentralized prediction platform on the Polygon blockchain. It executes trades on the BTC Up/Down 5-minute market.
+
+System Flow:
+[TradingView 2m Chart] -> [Pine Script Engine] -> [Python Flask Server] -> [Polymarket API / Polygon]
+
+---
+
+2. ⚙️ PHASE 1: PINE SCRIPT V6 ENGINE
+- Environment: TradingView 2-minute (2m) timeframe.
+- Timing Precision: The script strictly triggers at the start of every 10-minute window (00, 10, 20, 30, 40, 50) using modulo logic to perfectly align with Polymarket's 5m cycles.
+- Zero-Repaint: Enforces barstate.isconfirmed to prevent mid-candle false signals.
+- Multi-Layer Filters:
+  - Volume Vector: Triggers only when candle volume exceeds 200% of the 10-candle SMA.
+  - Momentum: Real body must occupy >60% of the total high-low range.
+  - MTF Trend: Uses multi-timeframe analysis to align trades with 30m and 1h EMAs.
+- Output: Dispatches structured JSON Webhooks.
+
+---
+
+3. 🛡️ PHASE 2: PYTHON FLASK GATEWAY (EXECUTION)
+- Tech Stack: Python 3.11, Flask, py-clob-client, deployed on Railway.app.
+- Payload Validation: Enforces strict JSON schema checks.
+- Dual-Cache Duplicate Guard: Hashes webhooks (SHA-256) and caches them for 60 seconds to silently drop duplicate or delayed signals.
+- Position Sizing Engine: Real-time Polymarket USDC balance querying. Sizing is strictly set to exactly 2.5% of total capital per trade.
+- Fill Price Protection: Executes Fill-or-Kill (FOK) orders. Auto-aborts execution if the target token Ask Price exceeds the $0.85 threshold to preserve favorable risk-reward ratios.
+- Fault Tolerance: Polygon network RPC timeout handling with a built-in 2x retry mechanism.
+
+---
+
+4. 🚀 PHASE 3: DEPLOYMENT & LOGGING
+- Cloud Infrastructure: Fully automated deployment pipeline via Nixpacks on Railway.
+- Structured Logging: Real-time file & console rotation logging tracking TxIDs, exact fill prices, skips, and capital allocation.
+- Execution Speed: Maintained sub-second latency from TradingView signal generation to Polygon smart-contract execution.
+
+*Note: Proprietary algorithmic source code, private keys, and credential configurations have been intentionally redacted from this public portfolio document.*
