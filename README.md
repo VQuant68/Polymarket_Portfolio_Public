@@ -36,7 +36,15 @@ The system is decoupled into three distinct architectural layers to ensure maxim
 ## 📊 3. Product Showcase & Visual Proof
 
 ![VQuant Polymarket Bot Dashboard](Assets/dashboard_screenshot.jpg)
-*Real-time TradingView Dashboard (VQuant Signal Engine) dynamically tracking Volume Vectors, MTF Trend alignments, and Timing Logic before dispatching execution signatures to the Polymarket Protocol.*
+
+**In-Depth Dashboard Breakdown:**
+The image above showcases the **VQuant Signal Engine Dashboard** running live on a 2-minute (2m) BTCUSDT chart. This UI acts as the "Brain" of the operation, rendering real-time algorithmic validation before any webhook is dispatched:
+1. **ADX Trend Strength Monitor:** Continuously scans the Average Directional Index (ADX). If the market enters a choppy/sideways phase (ADX < 20), the bot proactively enters "Block Mode" to prevent false breakouts.
+2. **Modulo Timing Sync:** The dashboard explicitly tracks the clock, ensuring executions *only* trigger at the exact boundaries of Polymarket's 5-minute cycles (e.g., `:00`, `:10`).
+3. **Multi-Timeframe (MTF) Alignment:** Real-time Boolean checks verifying whether the current 2m micro-trend aligns flawlessly with the 30-minute and 1-hour macro EMAs.
+4. **Volume Vector & Momentum:** Live calculation of the candle's real body (>60%) and algorithmic comparison of current transaction volume against the 10-candle moving average (requiring a >200% surge).
+
+*Only when all logic gates simultaneously validate does the system sign and broadcast the execution payload to the Python Cloud Gateway.*
 
 ---
 
